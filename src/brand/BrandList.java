@@ -135,9 +135,6 @@ public class BrandList extends ArrayList<Brand> {
         }
         Brand t = new Brand(ID, brandName, soundBrand, price);
         this.add(t);
-//        for (Brand brand : this) {
-//            System.out.println(brand);
-//        }
     }
 
     public void updateBrand() {
@@ -196,9 +193,6 @@ public class BrandList extends ArrayList<Brand> {
             BrandsUpdate.setSoundBrand(newSoundBrand);
             BrandsUpdate.setPrice(newPrice);
         }
-//        for (Brand brand : this) {
-//            System.out.println(brand);
-//        }
     }
 
     public void searchBrand() {
