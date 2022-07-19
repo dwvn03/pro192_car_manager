@@ -2,8 +2,6 @@ package my_lib.input;
 
 import java.util.InputMismatchException;
 
-import my_lib.validator.DoubleValidator;
-
 public class DoubleInput extends Input {
     public static double inputDouble(int decimalDigit) {
         while (true) {

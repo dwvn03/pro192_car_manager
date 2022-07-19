@@ -1,6 +1,9 @@
 package brand;
 
+
+
 public class Brand {
+
     String ID;
     String brandName;
     String soundBrand;

@@ -1,55 +1,74 @@
 package car;
 
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import brand.*;
-import my_lib.file_io.FileUtils;
 
 public class CarList extends ArrayList<Car> {
-    static Scanner sc = new Scanner(System.in);
     BrandList brandList;
 
     public CarList(BrandList brandList) {
         this.brandList = brandList;
     }
 
-    public boolean loadFromFile(String path) {
-        String[] lines = FileUtils.readFileAsLinesArray(path);
-
-        if (lines == null) {
+    public boolean loadFromFile(String filename) {
+        try {
+            File f = new File(filename);
+            if (!f.exists()) {
+                System.err.println("File " + filename + " does not exist.");
+                return false;
+            }
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                StringTokenizer stk = new StringTokenizer(line, ", ");
+                String carID = stk.nextElement().toString();
+                String brandID = stk.nextElement().toString();
+                int pos = brandList.searchID(brandID);
+                Brand b = brandList.get(pos);
+                String colour = stk.nextElement().toString();
+                String frameID = stk.nextElement().toString();
+                String engineID = stk.nextElement().toString();
+                Car car = new Car(carID, b, colour, frameID, engineID);
+                this.add(car);
+            }
+            br.close();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Cannot read from file " + filename + "!");
+            System.err.println("Error reason: " + e.getMessage());
             return false;
         }
-
-        for (String line : lines) {
-            StringTokenizer stk = new StringTokenizer(line, ", ");
-
-            String carID = stk.nextElement().toString();
-            String brandID = stk.nextElement().toString();
-            int pos = brandList.searchID(brandID);
-            Brand b = brandList.get(pos);
-            String colour = stk.nextElement().toString();
-            String frameID = stk.nextElement().toString();
-            String engineID = stk.nextElement().toString();
-
-            Car car = new Car(carID, b, colour, frameID, engineID);
-            this.add(car);
-        }
-
-        return true;
     }
-
-    public boolean saveToFile(String path) {
-        return FileUtils.writeArrayToFile(path, this.toArray());
-    }
-
+    
     public void listCars() {
-        Collections.sort(this);
-
+        int p1, p2;
+        
+        for (int i = 0; i < this.size(); i++) {
+            for (int j = i + 1; j < this.size(); j++) {
+                Car c1 = (Car) this.get(j);
+                Car c2 = (Car) this.get(i);
+                
+                p1 = this.indexOf(c1);
+                p2 = this.indexOf(c2);
+                
+                if (c1.compareTo(c2) < 0) {
+                    Collections.swap(this, p1, p2);
+                }
+            }
+        }
         for (Car car : this) {
-            System.out.println(car.screenString());
+            // System.out.println(car.screenString());
         }
         System.out.println("\n\n");
     }
@@ -82,8 +101,9 @@ public class CarList extends ArrayList<Car> {
     }
     
     public void addCar() {
+        Scanner sc = new Scanner(System.in);
         String carID = null;
-        Brand newBrand;
+        String brandID = null;
         String colour = null;
         String frameID = null;
         String engineID = null;
@@ -95,9 +115,18 @@ public class CarList extends ArrayList<Car> {
             }
             System.out.println("Car ID already exist, please enter again !!!");
         }
-
-        newBrand = brandList.getUserChoice();
-
+// đoạn này chỉ cần lắp menu.e ref_getChoice là xong
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
         while (true) {
             System.out.print("Enter colour: ");
             colour = sc.nextLine();
@@ -108,7 +137,6 @@ public class CarList extends ArrayList<Car> {
                 System.out.println("Colour brand can't be blank, please enter again!!!");
             }
         }
-
         while (true) {
             System.out.print("Enter frame ID: ");
             frameID = sc.nextLine();
@@ -128,7 +156,6 @@ public class CarList extends ArrayList<Car> {
                 }
             }
         }
-
         while (true) {
             System.out.print("Enter engine ID: ");
             engineID = sc.nextLine();
@@ -148,12 +175,33 @@ public class CarList extends ArrayList<Car> {
                 }
             }
         }
-
-        Car t = new Car(carID, newBrand, colour, frameID, engineID);
-        this.add(t);
+//        Car t = new Car(carID, brand, colour, frameID, engineID);
+//        this.add(t);
+    }
+    
+    public boolean saveToFile(String filename) {
+        try {
+            File f = new File(filename);
+            // boolean writeMode = OVERWRITE;
+            boolean writeMode = true;
+            FileWriter fw = new FileWriter(f, writeMode);
+            PrintWriter pw = new PrintWriter(fw);
+            for (Car car : this) {
+                pw.println(car);
+            }
+            pw.close();
+            fw.close();
+            System.out.println("Add car to " + filename + " success.");
+            return true;
+        } catch (Exception e) {
+            System.err.println("Cannot write to file " + filename + "!");
+            System.err.println("Error reason: " + e.getMessage());
+            return false;
+        }
     }
     
     public boolean removeCar() {
+        Scanner sc = new Scanner(System.in);
         String removedID = null;
         System.out.print("Enter car ID: ");
         removedID = sc.nextLine();
@@ -168,9 +216,10 @@ public class CarList extends ArrayList<Car> {
     }
     
     public void updateCar() {
+        Scanner sc = new Scanner(System.in);
         String carID = null;
         String newCarID = null;
-        Brand newBrand;
+        String newBrandID = null;
         String newColour = null;
         String newFrameID = null;
         String newEngineID = null;
@@ -188,9 +237,18 @@ public class CarList extends ArrayList<Car> {
                 }
                 System.out.println("ID already exist, please enter again !!!");
             }
-
-            newBrand = brandList.getUserChoice();
-
+// đoạn này chỉ cần lắp menu.e ref_getChoice là xong
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
             while (true) {
                 System.out.print("Enter new colour: ");
                 newColour = sc.nextLine();
@@ -201,7 +259,6 @@ public class CarList extends ArrayList<Car> {
                     System.out.println("Colour can't be blank, please enter again!!!");
                 }
             }
-
             while (true) {
                 System.out.print("Enter new frame ID: ");
                 newFrameID = sc.nextLine();
@@ -221,7 +278,6 @@ public class CarList extends ArrayList<Car> {
                     }
                 }
             }
-
             while (true) {
                 System.out.print("Enter new engine ID: ");
                 newEngineID = sc.nextLine();
@@ -241,9 +297,8 @@ public class CarList extends ArrayList<Car> {
                     }
                 }
             }
-
             CarUpdate.setCarID(newCarID);
-            CarUpdate.setBrand(newBrand);
+//            CarUpdate.setBrand(newBrandID);
             CarUpdate.setColor(newColour);
             CarUpdate.setFrameID(newFrameID);
             CarUpdate.setEngineID(newEngineID);
@@ -251,15 +306,16 @@ public class CarList extends ArrayList<Car> {
     }
     
     public void printBasedBrandName() {
+        Scanner sc = new Scanner(System.in);
         System.out.print("Input: ");
         String aPartOfBrandName = sc.nextLine();
         int count = 0;
         for (int i = 0; i < this.size(); i++) {
             Car c = this.get(i);
-            if (c.brand.getBrandName().contains(aPartOfBrandName)) {
-                System.out.println(c.screenString());
-                count++;
-            }
+            // if (c.brand.brandName.contains(aPartOfBrandName)) {
+            //     System.out.println(c.screenString());
+            //     count++;
+            // }
         }
         if (count == 0) {
             System.out.println("No car is detected!");

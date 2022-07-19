@@ -2,8 +2,6 @@ package my_lib.input;
 
 import java.lang.StringBuilder;
 
-import my_lib.validator.StringValidator;
-
 public class StringInput extends Input {
     public static String inputStr(String msg) {
         System.out.format("%s : ", msg);

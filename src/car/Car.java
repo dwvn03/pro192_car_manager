@@ -5,6 +5,7 @@ import brand.Brand;
 
 
 public class Car implements Comparable<Car> {
+
     String carID;
     Brand brand;
     String color;
@@ -60,10 +61,6 @@ public class Car implements Comparable<Car> {
 
     public void setEngineID(String engineID) {
         this.engineID = engineID;
-    }
-
-    public String screenString() {
-        return brand + "\n" + carID + ", " + color + ", " + frameID + ", " + engineID + "\n";
     }
 
     @Override

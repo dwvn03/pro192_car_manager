@@ -10,11 +10,10 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
 
-public class FileUtils {
-    static final boolean OVERWRITE = false;
-    static final boolean APPEND = true;
+import java.util.StringTokenizer;
 
-    public static String[] readFileAsLinesArray(String path) {
+public class FileUtils {
+    public static List<String> readFileAsLinesList(String path) {
         try {
             File f = new File(path);
 
@@ -33,9 +32,7 @@ public class FileUtils {
             }
 
             br.close();
-            fr.close();
-
-            return lines.toArray(new String[0]);
+            return lines;
         } catch (IOException e) {
             System.err.println("Cannot read from " + path + "!");
             System.err.println("Error reason: " + e.getMessage());
@@ -43,25 +40,24 @@ public class FileUtils {
         }
     }
 
-    public static boolean writeArrayToFile(String path, Object[] list) {
-        try {
-            File f = new File(path);
-            boolean writeMode = OVERWRITE;
-            FileWriter fw = new FileWriter(f, writeMode);
-            PrintWriter pw = new PrintWriter(fw);
+    public static void main(String[] args) {
+        List<String> bla = readFileAsLinesList("brands.txt");
 
-            for (Object object : list) {
-                pw.println(object);
-            }
+        for (String line : bla) {
+            System.out.println("\'" + line + "\'");
 
-            pw.close();
-            fw.close();
+            StringTokenizer stk = new StringTokenizer(line, ",: ");
+            String ID = stk.nextElement().toString();
+            String brandName = stk.nextElement().toString();
+            String soundBrand = stk.nextElement().toString();
+            double price = Double.parseDouble(stk.nextElement().toString());
 
-            return true;
-        } catch (IOException e) {
-            System.err.println("Cannot write to " + path + "!");
-            System.err.println("Error reason: " + e.getMessage());
-            return false;
+            System.out.println(ID);
+            System.out.println(brandName);
+            System.out.println(soundBrand);
+            System.out.println(price);
+            // Brand brand = new Brand(ID, brandName, soundBrand, price);
+            // this.add(brand);
         }
     }
 }

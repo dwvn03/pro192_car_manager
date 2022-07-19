@@ -1,4 +1,4 @@
-package my_lib.validator;
+package my_lib.input;
 
 public class IntValidator {
     public static int numDigits(int n) {

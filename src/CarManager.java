@@ -1,44 +1,42 @@
-package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import brand.BrandList;
 import car.CarList;
-import my_lib.input.Input;
+import my_lib.input.IntInput;
 
 public class CarManager {
 
     public static void main(String[] args) {
         boolean exitProgram = false;
-        Menu<String> menu = new Menu<>();
 
         BrandList brandlist = new BrandList();
-        brandlist.loadFromFile("brands.txt");
-
         CarList carlist = new CarList(brandlist);
+        brandlist.loadFromFile("brands.txt");
         carlist.loadFromFile("cars.txt");
 
         ArrayList<String> options = new ArrayList<>(Arrays.asList(
-            "List all brands",
-            "Add a new brand",
-            "Search a brand based on its ID",
-            "Update a brand",
-            "Save brands to the file, named brands.txt",
-            "List all cars in ascending order of brand names",
-            "List cars based on a part of an input brand name",
-            "Add a car",
-            "Remove a car based on its ID",
-            "Update a car based on its ID",
-            "Save cars to file, named cars.txt",
-            "Exit"
+                "List all brands",
+                "Add a new brand",
+                "Search a brand based on its ID",
+                "Update a brand",
+                "Save brands to the file, named brands.txt",
+                "List all cars in ascending order of brand names",
+                "List cars based on a part of an input brand name",
+                "Add a car",
+                "Remove a car based on its ID",
+                "Update a car based on its ID",
+                "Save cars to file, named cars.txt",
+                "Exit"
         ));
 
         while (!exitProgram) {
+            System.out.println("==========================Menu==========================");
+            System.out.println("");
+            Menu.int_getChoice(options);
+            int choice = MyLibs.getInt("Enter your choice: ", "Invalid choice.", 1, 11, null);
             System.out.println("=======================Minh Trang BMW=======================\n");
-            System.out.println("============================Menu============================\n");
-
-            int choice = menu.int_getChoice(options);
             switch (choice) {
                 case 1:
                     brandlist.listBrand();
@@ -75,13 +73,7 @@ public class CarManager {
                     break;
                 case 12:
                     exitProgram = true;
-                    System.out.println("Goodbye");
                     break;
-            }
-
-            if (!exitProgram) {
-                System.out.print("\nPress enter to continue ");
-                Input.waitForEnter();
             }
         }
     }

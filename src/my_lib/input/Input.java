@@ -9,10 +9,6 @@ public class Input {
         sc.nextLine();
     }
 
-    public static void waitForEnter() {
-        sc.nextLine();
-    }
-
     public static void printErrMsg(String object, String msg) {
         System.out.format("\nInvalid %s :\n", object);
         System.out.println(msg);
