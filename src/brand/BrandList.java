@@ -75,6 +75,7 @@ public class BrandList extends ArrayList<Brand> {
         System.out.println("\n\n");
 
         System.out.println("Press enter to continue");
+        
     }
 
     public int searchID(String ID) {

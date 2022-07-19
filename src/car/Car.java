@@ -72,7 +72,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return carID + ", " + brand.ID + ", " + color + ", " + frameID + ", " + engineID;
+        return carID + ", " + brand.getID() + ", " + color + ", " + frameID + ", " + engineID;
     }
 
     public int comparedTo(Car C) {
