@@ -1,4 +1,4 @@
-package input;
+package my_lib.input;
 
 public class BooleanInput extends Input {
     public static boolean inputBool(String msg) {

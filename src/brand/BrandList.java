@@ -1,82 +1,56 @@
 package brand;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
-/**
- *
- * @author admin
- */
+import java.util.Scanner;
+import java.util.ArrayList; 
+import java.util.StringTokenizer;
+
+import my_lib.file_io.FileUtils;
+import main.Menu;
+
 public class BrandList extends ArrayList<Brand> {
+    static Scanner sc = new Scanner(System.in);
+    static Menu<Brand> menu = new Menu<>();
 
-    final boolean OVERWRITE = false;
-    final boolean APPEND = true;
+    public boolean loadFromFile(String path) {
+        String[] lines = FileUtils.readFileAsLinesArray(path);
 
-    public boolean loadFromFile(String filename) {
-        try {
-            File f = new File(filename);
-            if (!f.exists()) {
-                System.err.println("File " + filename + " does not exist.");
-                return false;
-            }
-            FileReader fr = new FileReader(f);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                StringTokenizer stk = new StringTokenizer(line, ",:");
-                String ID = stk.nextElement().toString();
-                String brandName = stk.nextElement().toString();
-                String soundBrand = stk.nextElement().toString();
-                double price = Double.parseDouble(stk.nextElement().toString());
-                Brand brand = new Brand(ID, brandName, soundBrand, price);
-                this.add(brand);
-            }
-            return true;
-        } catch (Exception e) {
-            System.err.println("Cannot read from file " + filename + "!");
-            System.err.println("Error reason: " + e.getMessage());
+        if (lines == null) {
             return false;
         }
+
+        for (String line : lines) {
+            StringTokenizer stk = new StringTokenizer(line, ",:");
+
+            String ID = stk.nextElement().toString().trim();
+            String brandName = stk.nextElement().toString().trim();
+            String soundBrand = stk.nextElement().toString().trim();
+            double price = Double.parseDouble(stk.nextElement().toString());
+
+            Brand brand = new Brand(ID, brandName, soundBrand, price);
+            this.add(brand);
+        }
+
+        return true;
     }
 
-    public boolean saveToFile(String filename) {
-        try {
-            File f = new File(filename);
-            boolean writeMode = OVERWRITE;
-            FileWriter fw = new FileWriter(f, writeMode);
-            PrintWriter pw = new PrintWriter(fw);
-            for (Brand brand : this) {
-                pw.println(brand);
-            }
-            pw.close();
-            fw.close();
-            System.out.println("Add brand to " + filename + " success.");
-            return true;
-        } catch (Exception e) {
-            System.err.println("Cannot write to file " + filename + "!");
-            System.err.println("Error reason: " + e.getMessage());
-            return false;
-        }
+    public boolean saveToFile(String path) {
+        return FileUtils.writeArrayToFile(path, this.toArray());
     }
 
     public void listBrand() {
-        for (Brand brand : this) {
-            System.out.println(brand);
+        if (this.size() == 0) {
+            System.out.println("The list is empty");
+        } else {
+            for (Brand brand : this) {
+                System.out.println(brand);
+            }
         }
-        System.out.println("\n\n");
-
-        System.out.println("Press enter to continue");
-        
     }
+
+    public Brand getUserChoice() {
+        return menu.ref_getChoice(this);
+    }
+
 
     public int searchID(String ID) {
         for (int i = 0; i < this.size(); i++) {
@@ -88,17 +62,13 @@ public class BrandList extends ArrayList<Brand> {
     }
 
     public void addBrand() {
-        BrandList brandlist = new BrandList();
-        brandlist.loadFromFile("brands.txt");
-        Scanner scString = new Scanner(System.in);
-        Scanner scDouble = new Scanner(System.in);
         String ID = null;
         String brandName = null;
         String soundBrand = null;
         double price = 0;
         while (true) {
             System.out.print("Enter ID: ");
-            ID = scString.nextLine();
+            ID = sc.nextLine();
             if (searchID(ID) == -1) {
                 break;
             }
@@ -106,7 +76,7 @@ public class BrandList extends ArrayList<Brand> {
         }
         while (true) {
             System.out.print("Enter brand name: ");
-            brandName = scString.nextLine();
+            brandName = sc.nextLine();
             String name = brandName.trim();
             if (!name.isEmpty()) {
                 break;
@@ -116,7 +86,7 @@ public class BrandList extends ArrayList<Brand> {
         }
         while (true) {
             System.out.print("Enter sound brand: ");
-            soundBrand = scString.nextLine();
+            soundBrand = sc.nextLine();
             String sound = soundBrand.trim();
             if (!sound.isEmpty()) {
                 break;
@@ -126,7 +96,7 @@ public class BrandList extends ArrayList<Brand> {
         }
         while (true) {
             System.out.print("Enter price: ");
-            price = scDouble.nextDouble();
+            price = sc.nextDouble();
             if (price >= 0) {
                 break;
             } else {
@@ -138,22 +108,20 @@ public class BrandList extends ArrayList<Brand> {
     }
 
     public void updateBrand() {
-        Scanner scString = new Scanner(System.in);
-        Scanner scDouble = new Scanner(System.in);
         String newID = null;
         String newBrandName = null;
         String newSoundBrand = null;
         double newPrice = 0;
         String ID = null;
         System.out.print("Enter ID: ");
-        ID = scString.nextLine();
+        ID = sc.nextLine();
         if (searchID(ID) == -1) {
             System.out.println("Not found!");
         } else {
             Brand BrandsUpdate = this.get(searchID(ID));
             while (true) {
                 System.out.print("Enter new ID: ");
-                newID = scString.nextLine();
+                newID = sc.nextLine();
                 if (searchID(newID) == -1) {
                     break;
                 }
@@ -161,7 +129,7 @@ public class BrandList extends ArrayList<Brand> {
             }
             while (true) {
                 System.out.print("Enter new brand name: ");
-                newBrandName = scString.nextLine();
+                newBrandName = sc.nextLine();
                 String name = newBrandName.trim();
                 if (!name.isEmpty()) {
                     break;
@@ -171,7 +139,7 @@ public class BrandList extends ArrayList<Brand> {
             }
             while (true) {
                 System.out.print("Enter new sound brand: ");
-                newSoundBrand = scString.nextLine();
+                newSoundBrand = sc.nextLine();
                 String sound = newSoundBrand.trim();
                 if (!sound.isEmpty()) {
                     break;
@@ -181,7 +149,7 @@ public class BrandList extends ArrayList<Brand> {
             }
             while (true) {
                 System.out.print("Enter new price: ");
-                newPrice = scDouble.nextDouble();
+                newPrice = sc.nextDouble();
                 if (newPrice >= 0) {
                     break;
                 } else {
@@ -196,7 +164,6 @@ public class BrandList extends ArrayList<Brand> {
     }
 
     public void searchBrand() {
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter ID: ");
         String ID = sc.nextLine();
         if (searchID(ID) == -1) {
@@ -206,5 +173,4 @@ public class BrandList extends ArrayList<Brand> {
             System.out.println(this.get(searchID(ID)));
         }
     }
-//    public Brand getUserChoice();
 }

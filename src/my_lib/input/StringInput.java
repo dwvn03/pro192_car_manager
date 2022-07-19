@@ -1,15 +1,15 @@
-package input;
+package my_lib.input;
 
 import java.lang.StringBuilder;
 
+import my_lib.validator.StringValidator;
+
 public class StringInput extends Input {
     public static String inputStr(String msg) {
-        while (true) {
-            System.out.format("Input %s : ", msg);
-            String input = sc.nextLine().trim();
+        System.out.format("%s : ", msg);
+        String input = sc.nextLine().trim();
 
-            return input;
-        }
+        return input;
     }
 
     public static String inputStr(int strLen) {

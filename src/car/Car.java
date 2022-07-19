@@ -1,18 +1,10 @@
 package car;
 import brand.Brand;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author admin
- */
-public class Car {
 
+
+public class Car implements Comparable<Car> {
     String carID;
     Brand brand;
     String color;
@@ -70,12 +62,16 @@ public class Car {
         this.engineID = engineID;
     }
 
+    public String screenString() {
+        return brand + "\n" + carID + ", " + color + ", " + frameID + ", " + engineID + "\n";
+    }
+
     @Override
     public String toString() {
         return carID + ", " + brand.getID() + ", " + color + ", " + frameID + ", " + engineID;
     }
 
-    public int comparedTo(Car C) {
+    public int compareTo(Car C) {
         int d = this.brand.getBrandName().compareTo(C.brand.getBrandName());
         if (d != 0) {
             return d;

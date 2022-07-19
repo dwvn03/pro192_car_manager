@@ -1,4 +1,4 @@
-package input;
+package my_lib.validator;
 
 public class DoubleValidator {
     public static int decimalDigits(double n) {

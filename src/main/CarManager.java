@@ -1,43 +1,44 @@
+package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author admin
- */
+import brand.BrandList;
+import car.CarList;
+import my_lib.input.Input;
+
 public class CarManager {
 
     public static void main(String[] args) {
+        boolean exitProgram = false;
+        Menu<String> menu = new Menu<>();
 
         BrandList brandlist = new BrandList();
-        CarList carlist = new CarList(brandlist);
         brandlist.loadFromFile("brands.txt");
+
+        CarList carlist = new CarList(brandlist);
         carlist.loadFromFile("cars.txt");
-        while (true) {
-            System.out.println("==========================Menu==========================");
-            ArrayList<String> ops = new ArrayList<>(Arrays.asList(
-                    "List all brands",
-                    "Add a new brand",
-                    "Search a brand based on its ID",
-                    "Update a brand",
-                    "Save brands to the file, named brands.txt",
-                    "List all cars in ascending order of brand names",
-                    "List cars based on a part of an input brand name",
-                    "Add a car",
-                    "Remove a car based on its ID",
-                    "Update a car based on its ID",
-                    "Save cars to file, named cars.txt"
-            ));
-            System.out.println("");
-            Menu.int_getChoice(ops);
-            int choice = MyLibs.getInt("Enter your choice: ", "Invalid choice.", 1, 11, null);
+
+        ArrayList<String> options = new ArrayList<>(Arrays.asList(
+            "List all brands",
+            "Add a new brand",
+            "Search a brand based on its ID",
+            "Update a brand",
+            "Save brands to the file, named brands.txt",
+            "List all cars in ascending order of brand names",
+            "List cars based on a part of an input brand name",
+            "Add a car",
+            "Remove a car based on its ID",
+            "Update a car based on its ID",
+            "Save cars to file, named cars.txt",
+            "Exit"
+        ));
+
+        while (!exitProgram) {
             System.out.println("=======================Minh Trang BMW=======================\n");
+            System.out.println("============================Menu============================\n");
+
+            int choice = menu.int_getChoice(options);
             switch (choice) {
                 case 1:
                     brandlist.listBrand();
@@ -72,6 +73,15 @@ public class CarManager {
                 case 11:
                     carlist.saveToFile("cars.txt");
                     break;
+                case 12:
+                    exitProgram = true;
+                    System.out.println("Goodbye");
+                    break;
+            }
+
+            if (!exitProgram) {
+                System.out.print("\nPress enter to continue ");
+                Input.waitForEnter();
             }
         }
     }

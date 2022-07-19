@@ -1,4 +1,4 @@
-package input;
+package my_lib.input;
 
 import java.util.Scanner;
 
@@ -6,6 +6,10 @@ public class Input {
     static final Scanner sc = new Scanner(System.in);
 
     public static void clearScannerBuffer() {
+        sc.nextLine();
+    }
+
+    public static void waitForEnter() {
         sc.nextLine();
     }
 

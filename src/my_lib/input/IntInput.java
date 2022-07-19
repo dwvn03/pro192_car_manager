@@ -1,6 +1,8 @@
-package input;
+package my_lib.input;
 
 import java.util.InputMismatchException;
+
+import my_lib.validator.IntValidator;
 
 public class IntInput extends Input {
     public static int inputInt(String msg, int max) {
